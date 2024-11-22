@@ -13,35 +13,26 @@ print("Number of columns:", num_cols)
 
 ### Wavelength [nm] 857 rows; Intensity  138 columns ###
 ### Time = 137 x 5s = 685 s ---> 121 colums of Intensity
-delt_T = 5 # m
 N_intensity = 121
-N_wavelength = 857
-time = (N_intensity - 1) * delt_T
+N_wavelength = num_rows
 
 WaveLength = df.iloc[:, 0].to_numpy() 
-Intensity = np.zeros((num_rows, num_cols-1))
-
-for i in range(0, num_cols - 1):
+Intensity = np.zeros((num_rows, N_intensity))
+for i in range(0, N_intensity):
     Intensity[:, i] = df.iloc[:, i+1].to_numpy()
     # print("Number of rows:",i)
-
-n_lines = 3
+# print("WaveLength:",WaveLength)
+# print("Intensity:",Intensity)
+n_lines = N_intensity
 cmap = mpl.colormaps['plasma']
 colors = cmap(np.linspace(0, 1, n_lines))
 fig, ax = plt.subplots()
 for i, color in enumerate(colors):
     ax.plot(WaveLength, Intensity[:, i], color=color)
-
-
-
-# ### Plotting data ###
-# arr1 = np.array([1, 2, 3, 4, 5])
-# # From a tuple
-# arr2 = np.array((1, 3, 1, 2, 1))
-# ax.plot(arr1, arr2)
-# plt.show()
-# exit()
-
+    # if np.any(Intensity[:, i] > 1000):  # If there are any values > 1000
+    #     print(f"Values larger than 1000 in Intensity column {i+1}:")
+    #     print(Intensity[Intensity[:, i] > 1000, i])  # Print values larger than 1000
+    #     print()  # Print an empty line for clarity
 
 # Create a ScalarMappable for the color bar
 norm = mpl.colors.Normalize(vmin=0, vmax=n_lines - 1)  # Normalize line indices to colormap
@@ -51,10 +42,12 @@ sm.set_array([])  # Required for the color bar
 # Add the color bar to the figure
 cbar = fig.colorbar(sm, ax=ax)
 cbar.set_label('Line Index')  # Label for the color bar
+ax.set_xlabel("Wavelength (nm)")
+ax.set_ylabel("Intensity")
 
 plt.show()
 
-
+exit()
 
 
 
@@ -74,7 +67,7 @@ plt.show()
 ### (wave_length[0, :], intensity[0, 0, :]) - (wave_length[0, :], intensity[0, 1, :]) -...-
 ### (wave_length[0, :], intensity[0, 856, :])
 
-exit()
+
 
 
 ### Plotting parameter###
