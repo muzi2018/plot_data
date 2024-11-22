@@ -1,88 +1,101 @@
-import warnings
-
 import matplotlib.pyplot as plt
 import numpy as np
-
-from matplotlib.collections import LineCollection
-
-
-def colored_line(x, y, c, ax, **lc_kwargs):
-    """
-    Plot a line with a color specified along the line by a third value.
-
-    It does this by creating a collection of line segments. Each line segment is
-    made up of two straight lines each connecting the current (x, y) point to the
-    midpoints of the lines connecting the current point with its two neighbors.
-    This creates a smooth line with no gaps between the line segments.
-
-    Parameters
-    ----------
-    x, y : array-like
-        The horizontal and vertical coordinates of the data points.
-    c : array-like
-        The color values, which should be the same size as x and y.
-    ax : Axes
-        Axis object on which to plot the colored line.
-    **lc_kwargs
-        Any additional arguments to pass to matplotlib.collections.LineCollection
-        constructor. This should not include the array keyword argument because
-        that is set to the color argument. If provided, it will be overridden.
-
-    Returns
-    -------
-    matplotlib.collections.LineCollection
-        The generated line collection representing the colored line.
-    """
-    if "array" in lc_kwargs:
-        warnings.warn('The provided "array" keyword argument will be overridden')
-
-    # Default the capstyle to butt so that the line segments smoothly line up
-    default_kwargs = {"capstyle": "butt"}
-    default_kwargs.update(lc_kwargs)
-
-    # Compute the midpoints of the line segments. Include the first and last points
-    # twice so we don't need any special syntax later to handle them.
-    x = np.asarray(x)
-    y = np.asarray(y)
-    x_midpts = np.hstack((x[0], 0.5 * (x[1:] + x[:-1]), x[-1]))
-    y_midpts = np.hstack((y[0], 0.5 * (y[1:] + y[:-1]), y[-1]))
-
-    # Determine the start, middle, and end coordinate pair of each line segment.
-    # Use the reshape to add an extra dimension so each pair of points is in its
-    # own list. Then concatenate them to create:
-    # [
-    #   [(x1_start, y1_start), (x1_mid, y1_mid), (x1_end, y1_end)],
-    #   [(x2_start, y2_start), (x2_mid, y2_mid), (x2_end, y2_end)],
-    #   ...
-    # ]
-    coord_start = np.column_stack((x_midpts[:-1], y_midpts[:-1]))[:, np.newaxis, :]
-    coord_mid = np.column_stack((x, y))[:, np.newaxis, :]
-    coord_end = np.column_stack((x_midpts[1:], y_midpts[1:]))[:, np.newaxis, :]
-    segments = np.concatenate((coord_start, coord_mid, coord_end), axis=1)
-
-    lc = LineCollection(segments, **default_kwargs)
-    lc.set_array(c)  # set the colors of each segment
-
-    return ax.add_collection(lc)
+import matplotlib as mpl
 
 
-# -------------- Create and show plot --------------
-# Some arbitrary function that gives x, y, and color values
-t = np.linspace(-7.4, -0.5, 200)
-x = 0.9 * np.sin(t)
-y = 0.9 * np.cos(1.6 * t)
-color = np.linspace(0, 2, t.size)
+import pandas as pd
 
-# Create a figure and plot the line on it
-fig1, ax1 = plt.subplots()
-lines = colored_line(x, y, color, ax1, linewidth=10, cmap="plasma")
-fig1.colorbar(lines)  # add a color legend
+###--- Data Processing ---###
+df = pd.read_excel('B0PC-heatup.xlsx', sheet_name='Sheet2')
+num_rows, num_cols = df.shape
+print("Number of rows:", num_rows)
+print("Number of columns:", num_cols)
 
-# Set the axis limits and tick positions
-ax1.set_xlim(-1, 1)
-ax1.set_ylim(-1, 1)
-ax1.set_xticks((-1, 0, 1))
-ax1.set_yticks((-1, 0, 1))
-ax1.set_title("Color at each point")
+### Wavelength [nm] 857 rows; Intensity  138 columns ###
+### Time = 137 x 5s = 685 s ---> 121 colums of Intensity
+delt_T = 5 # m
+N_intensity = 121
+N_wavelength = 857
+time = (N_intensity - 1) * delt_T
+
+WaveLength = df.iloc[:, 0].to_numpy() 
+Intensity = np.zeros((num_rows, num_cols-1))
+
+for i in range(0, num_cols - 1):
+    Intensity[:, i] = df.iloc[:, i+1].to_numpy()
+    # print("Number of rows:",i)
+    
+# print("Intensity = ", Intensity)
+    # for j in range()
+    # column_array = df.iloc[i, 0].to_numpy() 
+    # print("column_array = ", column_array)
+    # Intensity[i, :, 0] = column_array.flatten()
+
+
+# print("Wave Length:", WaveLength)
+# print("--------------------")
+
+### (wave_length[0, :], intensity[0, 0, :]) - (wave_length[0, :], intensity[0, 1, :]) -...-
+### (wave_length[0, :], intensity[0, 856, :])
+
+exit()
+
+
+### Plotting parameter###
+n_lines = N
+cmap = mpl.colormaps['plasma']
+colors = cmap(np.linspace(0, 1, n_lines))
+fig, ax = plt.subplots()
+
+# ### Plotting data ###
+#  = np.array([1, 2, 3, 4, 5])
+# # From a tuple
+# arr2 = np.array((1, 3, 1, 2, 1))
+# ax.plot(arr1, arr2)
+
+
+
+
+for i, color in enumerate(colors):
+    ax.plot([arr1, arr2], color=color)
+
+# print("Row Array:", row_array)  # Output: [1 2 3 4]
+# print("Column Array:", col_array)  # Output: [5 6 7 8]
+
+
+
+
+
+n_lines = 21
+cmap = mpl.colormaps['plasma']
+
+# Take colors at regular intervals spanning the colormap.
+colors = cmap(np.linspace(0, 1, n_lines))
+
+fig, ax = plt.subplots()
+
+arr1 = np.array([1, 2, 3, 4, 5])
+# From a tuple
+arr2 = np.array((1, 3, 1, 2, 1))
+ax.plot(arr1, arr2)
+
+# Plot the lines
+
+## 
+
+# for i, color in enumerate(colors):
+#     ax.plot([arr1, arr2], color=color)
+
+
+
+
+# Create a ScalarMappable for the color bar
+norm = mpl.colors.Normalize(vmin=0, vmax=n_lines - 1)  # Normalize line indices to colormap
+sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
+sm.set_array([])  # Required for the color bar
+
+# Add the color bar to the figure
+cbar = fig.colorbar(sm, ax=ax)
+cbar.set_label('Line Index')  # Label for the color bar
 
 plt.show()
