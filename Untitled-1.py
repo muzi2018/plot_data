@@ -35,13 +35,13 @@ for i, color in enumerate(colors):
     #     print()  # Print an empty line for clarity
 
 # Create a ScalarMappable for the color bar
-norm = mpl.colors.Normalize(vmin=0, vmax=n_lines - 1)  # Normalize line indices to colormap
+norm = mpl.colors.Normalize(vmin=0, vmax=10)  # Normalize line indices to colormap
 sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
 sm.set_array([])  # Required for the color bar
 
 # Add the color bar to the figure
 cbar = fig.colorbar(sm, ax=ax)
-cbar.set_label('Line Index')  # Label for the color bar
+cbar.set_label('Time(min)')  # Label for the color bar
 ax.set_xlabel("Wavelength (nm)")
 ax.set_ylabel("Intensity")
 
