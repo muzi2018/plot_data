@@ -24,6 +24,42 @@ Intensity = np.zeros((num_rows, num_cols-1))
 for i in range(0, num_cols - 1):
     Intensity[:, i] = df.iloc[:, i+1].to_numpy()
     # print("Number of rows:",i)
+
+n_lines = 3
+cmap = mpl.colormaps['plasma']
+colors = cmap(np.linspace(0, 1, n_lines))
+fig, ax = plt.subplots()
+for i, color in enumerate(colors):
+    ax.plot(WaveLength, Intensity[:, i], color=color)
+
+
+
+# ### Plotting data ###
+# arr1 = np.array([1, 2, 3, 4, 5])
+# # From a tuple
+# arr2 = np.array((1, 3, 1, 2, 1))
+# ax.plot(arr1, arr2)
+# plt.show()
+# exit()
+
+
+# Create a ScalarMappable for the color bar
+norm = mpl.colors.Normalize(vmin=0, vmax=n_lines - 1)  # Normalize line indices to colormap
+sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
+sm.set_array([])  # Required for the color bar
+
+# Add the color bar to the figure
+cbar = fig.colorbar(sm, ax=ax)
+cbar.set_label('Line Index')  # Label for the color bar
+
+plt.show()
+
+
+
+
+
+
+
     
 # print("Intensity = ", Intensity)
     # for j in range()
@@ -47,8 +83,10 @@ cmap = mpl.colormaps['plasma']
 colors = cmap(np.linspace(0, 1, n_lines))
 fig, ax = plt.subplots()
 
+
+
 # ### Plotting data ###
-#  = np.array([1, 2, 3, 4, 5])
+# arr1 = np.array([1, 2, 3, 4, 5])
 # # From a tuple
 # arr2 = np.array((1, 3, 1, 2, 1))
 # ax.plot(arr1, arr2)
