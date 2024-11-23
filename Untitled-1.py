@@ -3,6 +3,8 @@ from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import matplotlib as mpl
 import pandas as pd
+import matplotlib.ticker as ticker
+
 ### Color : https://matplotlib.org/stable/users/explain/colors/colormaps.html
 ###--- Data Processing ---###
 df = pd.read_excel('B0PC-heatup.xlsx', sheet_name='Sheet2')
@@ -41,7 +43,7 @@ fig, ax = plt.subplots()
 for i, color in enumerate(line_colors):
     alpha = 1 - (i / n_lines)  # Example: Gradual transparency
     rgba_color = list(color[:3]) + [alpha]  # Add the dynamic alpha
-    ax.plot(WaveLength, Intensity[:, i], color=color, linewidth=0.4)
+    ax.plot(WaveLength, Intensity[:, i], color=color, linewidth=1)
     # if np.any(Intensity[:, i] > 1000):  # If there are any values > 1000
     #     print(f"Values larger than 1000 in Intensity column {i+1}:")
     #     print(Intensity[Intensity[:, i] > 1000, i])  # Print values larger than 1000
@@ -58,18 +60,24 @@ cbar = fig.colorbar(sm, ax=ax)
 cbar.set_label('Time(min)',fontsize=14, fontweight='bold')  # Label for the color bar
 # Adjust colorbar tick labels (increase size and make them bold)
 cbar.ax.tick_params(labelsize=14, width=1.5)
+cbar.ax.set_yticks([0, 10])
 for label in cbar.ax.get_yticklabels():
     label.set_fontweight('bold')
     
     
-ax.set_xlabel("Wavelength (nm)",fontsize=14, fontweight='bold')
-ax.set_ylabel("Intensity(Counts)",fontsize=14, fontweight='bold')
+ax.set_xlabel("Wavelength (nm)", fontsize=14, fontweight='bold', labelpad=20)  # Increase labelpad for more distance
+ax.set_ylabel("Intensity(Counts)",fontsize=14, fontweight='bold', labelpad=20)
 
-# Move spines (XY axis lines) inside the plot
-# ax.spines['top'].set_position('zero')  # Move the top spine to inside
-# ax.spines['right'].set_position('zero')  # Move the right spine to inside
-# ax.spines['left'].set_position('zero')  # Move the left spine to inside
-# ax.spines['bottom'].set_position('zero')  # Move the bottom spine to inside
+ax.set_xlim(350, 600)
+
+# # Set custom ticks with scientific notation
+# ax.set_xticks([0, 3e4, 5e4])  # Define specific x-axis ticks (0, 1e2, 2e2)
+ax.set_yticks([0, 3e4, 6e4])  # Define specific y-axis ticks (0, 1e3, 2e3, 3e3)
+
+# Format tick labels in scientific notation
+# ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda x, _: f'{x:.0e}'))  # X-axis
+ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: f'{y:.0e}'))  # Y-axis
+
 
 # # Make sure the ticks are inside the plot too
 ax.tick_params(axis='x', direction='in', length=6, labelsize=14, width=1.5)
