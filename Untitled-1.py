@@ -3,7 +3,7 @@ from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import matplotlib as mpl
 import pandas as pd
-
+### Color : https://matplotlib.org/stable/users/explain/colors/colormaps.html
 ###--- Data Processing ---###
 df = pd.read_excel('B0PC-heatup.xlsx', sheet_name='Sheet2')
 num_rows, num_cols = df.shape
@@ -30,13 +30,18 @@ n_lines = N_intensity
 # cmap = mpl.colormaps['plasma']
 # colors = cmap(np.linspace(0, n_lines/30, n_lines))
 
-colors = ['blue', 'purple', 'red']  # Define your gradient
+# colors = ['blue', 'purple', 'red']  # Define your gradient
+colors = [(0, 0.282, 0.510),  # Blue
+          (0.608, 0.125, 0.478),  # Green
+          (0.773, 0.059, 0.078)]  # Red
 cmap = LinearSegmentedColormap.from_list('custom_cmap', colors, N=n_lines)
 # Generate colors for the plot
 line_colors = cmap(np.linspace(0, 1, n_lines))
 fig, ax = plt.subplots()
 for i, color in enumerate(line_colors):
-    ax.plot(WaveLength, Intensity[:, i], color=color)
+    alpha = 1 - (i / n_lines)  # Example: Gradual transparency
+    rgba_color = list(color[:3]) + [alpha]  # Add the dynamic alpha
+    ax.plot(WaveLength, Intensity[:, i], color=color, linewidth=0.4)
     # if np.any(Intensity[:, i] > 1000):  # If there are any values > 1000
     #     print(f"Values larger than 1000 in Intensity column {i+1}:")
     #     print(Intensity[Intensity[:, i] > 1000, i])  # Print values larger than 1000
