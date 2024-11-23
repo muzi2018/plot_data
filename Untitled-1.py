@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import matplotlib as mpl
 import pandas as pd
@@ -26,16 +27,21 @@ n_lines = N_intensity
 # cmap = mpl.colormaps['inferno']
 # cmap = mpl.colormaps['Pastel1'] 
 # cmap = mpl.colormaps['cividis'] 
-cmap = mpl.colormaps['plasma']
+# cmap = mpl.colormaps['plasma']
+# colors = cmap(np.linspace(0, n_lines/30, n_lines))
 
-colors = cmap(np.linspace(0, n_lines/30, n_lines))
+colors = ['blue', 'purple', 'red']  # Define your gradient
+cmap = LinearSegmentedColormap.from_list('custom_cmap', colors, N=n_lines)
+# Generate colors for the plot
+line_colors = cmap(np.linspace(0, 1, n_lines))
 fig, ax = plt.subplots()
-for i, color in enumerate(colors):
+for i, color in enumerate(line_colors):
     ax.plot(WaveLength, Intensity[:, i], color=color)
     # if np.any(Intensity[:, i] > 1000):  # If there are any values > 1000
     #     print(f"Values larger than 1000 in Intensity column {i+1}:")
     #     print(Intensity[Intensity[:, i] > 1000, i])  # Print values larger than 1000
     #     print()  # Print an empty line for clarity
+    print("number of i:", i)
 
 # Create a ScalarMappable for the color bar
 norm = mpl.colors.Normalize(vmin=0, vmax=10)  # Normalize line indices to colormap
