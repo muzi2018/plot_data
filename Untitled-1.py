@@ -1,8 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib as mpl
-
-
 import pandas as pd
 
 ###--- Data Processing ---###
@@ -26,11 +24,8 @@ for i in range(0, N_intensity):
 n_lines = N_intensity
 cmap = mpl.colormaps['Blues']
 # cmap = mpl.colormaps['inferno']
-
 # cmap = mpl.colormaps['Pastel1'] 
 # cmap = mpl.colormaps['cividis'] 
-
-
 
 colors = cmap(np.linspace(0, n_lines/30, n_lines))
 fig, ax = plt.subplots()
