@@ -22,10 +22,11 @@ for i in range(0, N_intensity):
 # print("WaveLength:",WaveLength)
 # print("Intensity:",Intensity)
 n_lines = N_intensity
-cmap = mpl.colormaps['Blues']
+# cmap = mpl.colormaps['Blues']
 # cmap = mpl.colormaps['inferno']
 # cmap = mpl.colormaps['Pastel1'] 
 # cmap = mpl.colormaps['cividis'] 
+cmap = mpl.colormaps['plasma']
 
 colors = cmap(np.linspace(0, n_lines/30, n_lines))
 fig, ax = plt.subplots()
