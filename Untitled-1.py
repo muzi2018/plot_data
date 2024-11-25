@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib as mpl
 import pandas as pd
 import matplotlib.ticker as ticker
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 ### Color : https://matplotlib.org/stable/users/explain/colors/colormaps.html
 ###--- Data Processing ---###
@@ -39,14 +40,16 @@ for i, color in enumerate(line_colors):
 norm = mpl.colors.Normalize(vmin=0, vmax=10)  # Normalize line indices to colormap
 sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
 sm.set_array([])  # Required for the color bar
-# Add the color bar to the figure
-cbar = fig.colorbar(sm, ax=ax)
-cbar.set_label('Time(min)',fontsize=14, fontweight='bold')  # Label for the color bar
-# Adjust colorbar tick labels (increase size and make them bold)
-cbar.ax.tick_params(labelsize=14, width=1.5)
-cbar.ax.set_yticks([0, 10])
-for label in cbar.ax.get_yticklabels():
-    label.set_fontweight('bold')
+
+# # Add the color bar to the figure
+# cbar = fig.colorbar(sm, ax=ax)
+# cbar.set_label('Time(min)',fontsize=14, fontweight='bold')  # Label for the color bar
+# # Adjust colorbar tick labels (increase size and make them bold)
+# cbar.ax.tick_params(labelsize=14, width=1.5)
+# cbar.ax.set_yticks([0, 10])
+# for label in cbar.ax.get_yticklabels():
+#     label.set_fontweight('bold')
+
     
 #---- axis Label Parameter----
 ax.set_xlabel("Wavelength (nm)", fontsize=14, fontweight='bold', labelpad=20)  # Increase labelpad for more distance
@@ -76,8 +79,16 @@ border_thickness = 2  # 3mm in points
 for spine in ax.spines.values():
     spine.set_linewidth(border_thickness)
 
-
-
+# Create an inset_axes object for the color bar inside the plot
+cax = inset_axes(ax, width="2%", height="50%", loc='upper right', borderpad=4)  # Adjust 'loc' and 'borderpad'
+# Add the color bar to the inset_axes
+cbar = fig.colorbar(sm, cax=cax)
+cbar.set_label('Time(min)', fontsize=14, fontweight='bold', labelpad=1) # Color bar label
+cbar.ax.tick_params(labelsize=12, width=1.5)  # Adjust ticks
+cbar.ax.set_yticks([0, 10])
+for label in cbar.ax.get_yticklabels():
+    label.set_fontweight('bold')
+    
 plt.show()
 exit()
 
