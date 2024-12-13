@@ -8,8 +8,8 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 ### Color : https://matplotlib.org/stable/users/explain/colors/colormaps.html
 ###--- Data Processing ---###
-df = pd.read_excel('B0PC-heatup.xlsx', sheet_name='Sheet2')
-# df = pd.read_excel('B11PC-heatup.xlsx', sheet_name='Sheet2')
+# df = pd.read_excel('B0PC-heatup.xlsx', sheet_name='Sheet2')
+df = pd.read_excel('B11PC-heatup.xlsx', sheet_name='Sheet2')
 
 # Number of rows: 855
 # Number of columns: 138
@@ -20,7 +20,7 @@ print("Number of columns:", num_cols)
 
 ### Wavelength [nm] 857 rows; Intensity  138 columns ###
 ### Time = 137 x 5s = 685 s ---> 121 colums of Intensity
-N_intensity = 121
+N_intensity = 50
 N_wavelength = num_rows
 
 WaveLength = df.iloc[:, 0].to_numpy() 
@@ -59,11 +59,11 @@ sm.set_array([])  # Required for the color bar
 #---- axis Label Parameter----
 ax.set_xlabel("Wavelength (nm)", fontsize=14, fontweight='bold', labelpad=20)  # Increase labelpad for more distance
 ax.set_ylabel("Intensity(Counts)",fontsize=14, fontweight='bold', labelpad=20)
-ax.set_xlim(350, 800)
+ax.set_xlim(350, 650)
 
 # # Set custom ticks with scientific notation
 # ax.set_xticks([0, 3e4, 5e4])  # Define specific x-axis ticks (0, 1e2, 2e2)
-ax.set_yticks([0, 3e4, 6e4])  # Define specific y-axis ticks (0, 1e3, 2e3, 3e3)
+ax.set_yticks([0, 1e4, 1.5e4])  # Define specific y-axis ticks (0, 1e3, 2e3, 3e3)
 
 # Format tick labels in scientific notation
 # ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda x, _: f'{x:.0e}'))  # X-axis
