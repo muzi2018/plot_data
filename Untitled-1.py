@@ -11,8 +11,8 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 # df = pd.read_excel('B0PC-heatup.xlsx', sheet_name='Sheet2')
 df = pd.read_excel('B11PC-heatup.xlsx', sheet_name='Sheet2')
 
-# Number of rows: 855
-# Number of columns: 138
+# Number of rows: 55
+# Number of columns: 1700
 
 num_rows, num_cols = df.shape
 print("Number of rows:", num_rows)
@@ -42,7 +42,7 @@ for i, color in enumerate(line_colors):
     ax.plot(WaveLength, Intensity[:, i], color=color, linewidth=1)
 
 # Create a ScalarMappable for the color bar
-norm = mpl.colors.Normalize(vmin=0, vmax=10)  # Normalize line indices to colormap
+norm = mpl.colors.Normalize(vmin=0, vmax=5)  # Normalize line indices to colormap
 sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
 sm.set_array([])  # Required for the color bar
 
@@ -90,7 +90,7 @@ cax = inset_axes(ax, width="2%", height="50%", loc='upper right', borderpad=4)  
 cbar = fig.colorbar(sm, cax=cax)
 cbar.set_label('Time(min)', fontsize=14, fontweight='bold', labelpad=1) # Color bar label
 cbar.ax.tick_params(labelsize=12, width=1.5)  # Adjust ticks
-cbar.ax.set_yticks([0, 10])
+cbar.ax.set_yticks([0, 5])
 for label in cbar.ax.get_yticklabels():
     label.set_fontweight('bold')
     
