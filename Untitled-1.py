@@ -9,6 +9,11 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 ### Color : https://matplotlib.org/stable/users/explain/colors/colormaps.html
 ###--- Data Processing ---###
 df = pd.read_excel('B0PC-heatup.xlsx', sheet_name='Sheet2')
+# df = pd.read_excel('B11PC-heatup.xlsx', sheet_name='Sheet2')
+
+# Number of rows: 855
+# Number of columns: 138
+
 num_rows, num_cols = df.shape
 print("Number of rows:", num_rows)
 print("Number of columns:", num_cols)
@@ -25,9 +30,9 @@ for i in range(0, N_intensity):
 n_lines = N_intensity
 
 #---- Color ----
-colors = [(0, 0.282, 0.510),  # Blue
-          (0.608, 0.125, 0.478),  # Green
-          (0.773, 0.059, 0.078)]  # Red
+colors = [(0, 0.282, 0.510),        # Blue
+          (0.608, 0.125, 0.478),    # Green
+          (0.773, 0.059, 0.078)]    # Red
 cmap = LinearSegmentedColormap.from_list('custom_cmap', colors, N=n_lines)
 line_colors = cmap(np.linspace(0, 1, n_lines))
 fig, ax = plt.subplots()
@@ -54,7 +59,7 @@ sm.set_array([])  # Required for the color bar
 #---- axis Label Parameter----
 ax.set_xlabel("Wavelength (nm)", fontsize=14, fontweight='bold', labelpad=20)  # Increase labelpad for more distance
 ax.set_ylabel("Intensity(Counts)",fontsize=14, fontweight='bold', labelpad=20)
-ax.set_xlim(350, 600)
+ax.set_xlim(350, 800)
 
 # # Set custom ticks with scientific notation
 # ax.set_xticks([0, 3e4, 5e4])  # Define specific x-axis ticks (0, 1e2, 2e2)
