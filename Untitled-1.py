@@ -9,7 +9,7 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 ### Color : https://matplotlib.org/stable/users/explain/colors/colormaps.html
 ###--- Data Processing ---###
 # df = pd.read_excel('B0PC-heatup.xlsx', sheet_name='Sheet2')
-df = pd.read_excel('B11PC-heatup.xlsx', sheet_name='Sheet2')
+df = pd.read_excel('data0206/PBC-0.xlsx', sheet_name='Sheet2')
 
 # Number of rows: 55
 # Number of columns: 1700
@@ -18,13 +18,13 @@ num_rows, num_cols = df.shape
 print("Number of rows:", num_rows)
 print("Number of columns:", num_cols)
 
-### Wavelength [nm] 857 rows; Intensity  138 columns ###
-### Time = 137 x 5s = 685 s ---> 121 colums of Intensity
-N_intensity = 50
-N_wavelength = num_rows
+### Wavelength [nm] 1659 rows; Intensity  235 columns ###
+### Time = 235 x 5s = 1175 s ---> 121 colums of Intensity = 600 s
+N_intensity = 121
+N_wavelength = num_rows # 1659
 
-WaveLength = df.iloc[:, 0].to_numpy() 
-Intensity = np.zeros((num_rows, N_intensity))
+WaveLength = df.iloc[:, 0].to_numpy() # 1659 rows
+Intensity = np.zeros((num_rows, N_intensity)) # 1659 x 121
 for i in range(0, N_intensity):
     Intensity[:, i] = df.iloc[:, i+1].to_numpy()
 n_lines = N_intensity
@@ -90,7 +90,7 @@ cax = inset_axes(ax, width="2%", height="50%", loc='upper right', borderpad=4)  
 cbar = fig.colorbar(sm, cax=cax)
 cbar.set_label('Time(min)', fontsize=14, fontweight='bold', labelpad=1) # Color bar label
 cbar.ax.tick_params(labelsize=12, width=1.5)  # Adjust ticks
-cbar.ax.set_yticks([0, 5])
+# cbar.ax.set_yticks([0, 5])
 for label in cbar.ax.get_yticklabels():
     label.set_fontweight('bold')
     
