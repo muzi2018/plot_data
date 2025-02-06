@@ -9,8 +9,8 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 ### Color : https://matplotlib.org/stable/users/explain/colors/colormaps.html
 ###--- Data Processing ---###
 # df = pd.read_excel('B0PC-heatup.xlsx', sheet_name='Sheet2')
-df = pd.read_excel('data0206/PBC-0.xlsx', sheet_name='Sheet2') # group 1
-# df = pd.read_excel('data0206/pbc-b10.xlsx', sheet_name='Sheet2') # group 2
+# df = pd.read_excel('data0206/PBC-0.xlsx', sheet_name='Sheet2') # group 1
+df = pd.read_excel('data0206/pbc-b10.xlsx', sheet_name='Sheet2') # group 2
 
 # Number of rows: 55
 # Number of columns: 1700
@@ -21,13 +21,33 @@ print("Number of columns:", num_cols)
 
 ### Wavelength [nm] 1659 rows; Intensity  235 columns ###
 ### Time = 235 x 5s = 1175 s ---> 121 colums of Intensity = 600 s = 10 min
-N_intensity = 121 # 10 min
+N_intensity = 18 # 10 min
 N_wavelength = num_rows # 1659
 
 WaveLength = df.iloc[:, 0].to_numpy() # 1659 rows
 Intensity = np.zeros((num_rows, N_intensity)) # 1659 x 121
-for i in range(0, N_intensity):
-    Intensity[:, i] = df.iloc[:, i+1].to_numpy()
+
+Intensity[:, 0] = df.iloc[:, 39].to_numpy()
+Intensity[:, 1] = df.iloc[:, 37].to_numpy()
+Intensity[:, 2] = df.iloc[:, 40].to_numpy()
+Intensity[:, 3] = df.iloc[:, 22].to_numpy()
+Intensity[:, 4] = df.iloc[:, 41].to_numpy()
+Intensity[:, 5] = df.iloc[:, 23].to_numpy()
+Intensity[:, 6] = df.iloc[:, 43].to_numpy()
+Intensity[:, 7] = df.iloc[:, 24].to_numpy()
+Intensity[:, 8] = df.iloc[:, 44].to_numpy()
+Intensity[:, 9] = df.iloc[:, 25].to_numpy()
+Intensity[:, 10] = df.iloc[:, 36].to_numpy()
+Intensity[:, 11] = df.iloc[:, 45].to_numpy()
+Intensity[:, 12] = df.iloc[:, 26].to_numpy()
+Intensity[:, 13] = df.iloc[:, 34].to_numpy()
+Intensity[:, 14] = df.iloc[:, 27].to_numpy()
+Intensity[:, 15] = df.iloc[:, 31].to_numpy()
+Intensity[:, 16] = df.iloc[:, 30].to_numpy()
+Intensity[:, 17] = df.iloc[:, 46].to_numpy()
+
+
+
 n_lines = N_intensity
 
 #---- Color ----
@@ -48,8 +68,8 @@ for i, color in enumerate(line_colors):
 
 
 # Create a ScalarMappable for the color bar
-lasttime = 10
-norm = mpl.colors.Normalize(vmin=0, vmax=lasttime)  # Normalize line indices to colormap
+lasttime = 3
+norm = mpl.colors.Normalize(vmin=2, vmax=lasttime)  # Normalize line indices to colormap
 sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
 sm.set_array([])  # Required for the color bar
 
@@ -97,7 +117,7 @@ cax = inset_axes(ax, width="2%", height="50%", loc='upper right', borderpad=4)  
 cbar = fig.colorbar(sm, cax=cax)
 cbar.set_label('Time(min)', fontsize=14, fontweight='bold', labelpad=1) # Color bar label
 cbar.ax.tick_params(labelsize=12, width=1.5)  # Adjust ticks
-cbar.ax.set_yticks([0, 2, 4, 6, 8, lasttime])
+cbar.ax.set_yticks([2, lasttime])
 for label in cbar.ax.get_yticklabels():
     label.set_fontweight('bold')
     
