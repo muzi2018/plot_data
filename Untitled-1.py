@@ -51,9 +51,9 @@ Intensity[:, 17] = df.iloc[:, 46].to_numpy()
 n_lines = N_intensity
 
 #---- Color ----
-colors = [(0, 0.282, 0.510),        # Blue
-          (0.608, 0.125, 0.478),    # Green
-          (0.773, 0.059, 0.078)]    # Red
+colors = [(1, 1, 0),      # Yellow
+          (0, 1, 1),      # Cyan
+          (1, 0, 1)]      # Magenta
 cmap = LinearSegmentedColormap.from_list('custom_cmap', colors, N=n_lines)
 line_colors = cmap(np.linspace(0, 1, n_lines))
 fig, ax = plt.subplots()
