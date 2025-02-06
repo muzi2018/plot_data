@@ -9,8 +9,8 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 ### Color : https://matplotlib.org/stable/users/explain/colors/colormaps.html
 ###--- Data Processing ---###
 # df = pd.read_excel('B0PC-heatup.xlsx', sheet_name='Sheet2')
-df = pd.read_excel('data0206/PBC-0.xlsx', sheet_name='Sheet2') # group 1
-# df = pd.read_excel('data0206/pbc-b10.xlsx', sheet_name='Sheet2') # group 2
+# df = pd.read_excel('data0206/PBC-0.xlsx', sheet_name='Sheet2') # group 1
+df = pd.read_excel('data0206/pbc-b10.xlsx', sheet_name='Sheet2') # group 2
 
 # Number of rows: 55
 # Number of columns: 1700
@@ -21,7 +21,7 @@ print("Number of columns:", num_cols)
 
 ### Wavelength [nm] 1659 rows; Intensity  235 columns ###
 ### Time = 235 x 5s = 1175 s ---> 121 colums of Intensity = 600 s = 10 min
-N_intensity = 121
+N_intensity = 121 # 10 min
 N_wavelength = num_rows # 1659
 
 WaveLength = df.iloc[:, 0].to_numpy() # 1659 rows
@@ -41,6 +41,11 @@ for i, color in enumerate(line_colors):
     alpha = 1 - (i / n_lines)  # Example: Gradual transparency
     rgba_color = list(color[:3]) + [alpha]  # Add the dynamic alpha
     ax.plot(WaveLength, Intensity[:, i], color=color, linewidth=1)
+
+
+ax.plot(WaveLength, Intensity[:, 20], color="red", linewidth=1)
+
+
 
 # Create a ScalarMappable for the color bar
 lasttime = 10
