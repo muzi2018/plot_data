@@ -92,7 +92,7 @@ cax = inset_axes(ax, width="2%", height="50%", loc='upper right', borderpad=4)  
 cbar = fig.colorbar(sm, cax=cax)
 cbar.set_label('Time(min)', fontsize=14, fontweight='bold', labelpad=1) # Color bar label
 cbar.ax.tick_params(labelsize=12, width=1.5)  # Adjust ticks
-cbar.ax.set_yticks([0, lasttime])
+cbar.ax.set_yticks([0, 2, 4, 6, 8, lasttime])
 for label in cbar.ax.get_yticklabels():
     label.set_fontweight('bold')
     
