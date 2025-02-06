@@ -9,8 +9,8 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 ### Color : https://matplotlib.org/stable/users/explain/colors/colormaps.html
 ###--- Data Processing ---###
 # df = pd.read_excel('B0PC-heatup.xlsx', sheet_name='Sheet2')
-# df = pd.read_excel('data0206/PBC-0.xlsx', sheet_name='Sheet2') # group 1
-df = pd.read_excel('data0206/pbc-b10.xlsx', sheet_name='Sheet2') # group 2
+df = pd.read_excel('data0206/PBC-0.xlsx', sheet_name='Sheet2') # group 1
+# df = pd.read_excel('data0206/pbc-b10.xlsx', sheet_name='Sheet2') # group 2
 
 # Number of rows: 55
 # Number of columns: 1700
@@ -43,7 +43,7 @@ for i, color in enumerate(line_colors):
     ax.plot(WaveLength, Intensity[:, i], color=color, linewidth=1)
 
 
-ax.plot(WaveLength, Intensity[:, 20], color="red", linewidth=1)
+# ax.plot(WaveLength, Intensity[:, 20], color="red", linewidth=1)
 
 
 
@@ -101,6 +101,33 @@ cbar.ax.set_yticks([0, 2, 4, 6, 8, lasttime])
 for label in cbar.ax.get_yticklabels():
     label.set_fontweight('bold')
     
+    
+    
+# **Function to capture only points on the line**
+def on_click(event):
+    if event.inaxes:  # Check if the click is inside the plot
+        x_clicked = event.xdata
+        y_clicked = event.ydata
+
+        # Find the closest x index in the dataset
+        idx = np.abs(WaveLength - x_clicked).argmin()
+        x_nearest = WaveLength[idx]
+
+        # Find the nearest y-value by searching across all plotted lines
+        y_nearest_list = [Intensity[idx, i] for i in range(n_lines)]
+        y_nearest = min(y_nearest_list, key=lambda y: abs(y - y_clicked))  # Pick the closest intensity value
+
+        # Define a threshold to ignore points far from the line
+        threshold = 500  # Adjust this based on data range
+        if abs(y_clicked - y_nearest) < threshold:
+            print(f'Clicked on line at: x = {x_nearest:.2f}, y = {y_nearest:.2f}')
+            ax.plot(x_nearest, y_nearest, 'ro', markersize=8)  # Mark the clicked point
+            fig.canvas.draw()  # Update the plot dynamically
+
+
+fig.canvas.mpl_connect('button_press_event', on_click)
+
+
 plt.show()
 exit()
 
