@@ -41,7 +41,7 @@ WaveLength = df.iloc[:, 0].to_numpy()
 # num_rows: different wavelength, N_intensity: actually represent the timing
 Intensity = np.zeros((num_rows, N_intensity)) 
 for i in range(N_intensity):
-    Intensity[:, i] = df.iloc[:, i + 1].to_numpy() # 
+    Intensity[:, i] = df.iloc[:, i + 1].to_numpy() 
 
 n_lines = N_intensity  # Number of time steps
 
