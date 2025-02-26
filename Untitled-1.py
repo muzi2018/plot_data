@@ -64,8 +64,8 @@ sm.set_array([])  # Required for the color bar
 
     
 #---- axis Label Parameter----
-ax.set_xlabel("Wavelength (nm)", fontsize=14, fontweight='bold', labelpad=20)  # Increase labelpad for more distance
-ax.set_ylabel("Intensity(Counts)",fontsize=14, fontweight='bold', labelpad=20)
+ax.set_xlabel("Wavelength (nm)", fontsize=20, fontweight='bold', labelpad=20)  # Increase labelpad for more distance
+ax.set_ylabel("Intensity(Counts)",fontsize=20, fontweight='bold', labelpad=20)
 ax.set_xlim(350, 650)
 
 # # Set custom ticks with scientific notation
@@ -74,8 +74,10 @@ ax.set_yticks([0, 1e4, 1.5e4])  # Define specific y-axis ticks (0, 1e3, 2e3, 3e3
 
 # Format tick labels in scientific notation
 # ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda x, _: f'{x:.0e}'))  # X-axis
-ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: f'{y:.0e}'))  # Y-axis
 
+ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: f'{y:.0e}'))  # Y-axis
+# Add this line after setting up your plot
+ax.set_yticklabels([])
 
 # Make sure the ticks are inside the plot too
 ax.tick_params(axis='x', direction='in', length=6, labelsize=14, width=1.5)
@@ -92,11 +94,11 @@ for spine in ax.spines.values():
     spine.set_linewidth(border_thickness)
 
 # Create an inset_axes object for the color bar inside the plot
-cax = inset_axes(ax, width="2%", height="50%", loc='upper right', borderpad=4)  # Adjust 'loc' and 'borderpad'
+cax = inset_axes(ax, width="2%", height="50%", loc='upper right', borderpad=10)  # Adjust 'loc' and 'borderpad'
 # Add the color bar to the inset_axes
 cbar = fig.colorbar(sm, cax=cax)
-cbar.set_label('Time(min)', fontsize=14, fontweight='bold', labelpad=1) # Color bar label
-cbar.ax.tick_params(labelsize=12, width=1.5)  # Adjust ticks
+cbar.set_label('Time(min)', fontsize=20, fontweight='bold', labelpad=1) # Color bar label
+cbar.ax.tick_params(labelsize=20, width=1.5)  # Adjust ticks
 cbar.ax.set_yticks([0, 2, 4, 6, 8, lasttime])
 for label in cbar.ax.get_yticklabels():
     label.set_fontweight('bold')
