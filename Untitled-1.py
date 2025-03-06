@@ -22,7 +22,7 @@ print("Number of columns:", num_cols)
 ### Wavelength [nm] 1659 rows; Intensity  235 columns ###
 ### Time = 235 x 5s = 1175 s ---> 121 colums of Intensity = 600 s = 10 min
 N_intensity = 121 # 10 min
-# N_intensity = int(N_intensity/2)
+# N_intensity = 72
 N_wavelength = num_rows # 1659
 print("Number of N_intensity:", N_intensity)
 print("Number of N_wavelength:", N_wavelength)
