@@ -5,14 +5,15 @@ import matplotlib as mpl
 import pandas as pd
 import matplotlib.ticker as ticker
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+from scipy.signal import find_peaks
 
 #下降到30%，70%，5min峰值下降
 
 ### Color : https://matplotlib.org/stable/users/explain/colors/colormaps.html
 ###--- Data Processing ---###
 # df = pd.read_excel('B0PC-heatup.xlsx', sheet_name='Sheet2')
-df = pd.read_excel('data0206/PBC-0.xlsx', sheet_name='Sheet2') # group 1
-# df = pd.read_excel('data0206/pbc-b10.xlsx', sheet_name='Sheet2') # group 2
+# df = pd.read_excel('data0206/PBC-0.xlsx', sheet_name='Sheet2') # group 1
+df = pd.read_excel('data0206/pbc-b10.xlsx', sheet_name='Sheet2') # group 2
 
 # Number of rows: 55
 # Number of columns: 1700
@@ -42,6 +43,7 @@ colors = [(0, 0.282, 0.510),        # Blue
           (0.773, 0.059, 0.078)]    # Red
 cmap = LinearSegmentedColormap.from_list('custom_cmap', colors, N=n_lines)
 line_colors = cmap(np.linspace(0, 1, n_lines))
+
 fig, ax = plt.subplots()
 for i, color in enumerate(line_colors):
     alpha = 1 - (i / n_lines)  # Example: Gradual transparency
@@ -49,10 +51,57 @@ for i, color in enumerate(line_colors):
     ax.plot(WaveLength, Intensity[:, i], color=color, linewidth=1)
 
 
+# ---- Step 1: Find Peak in First Curve ----
+first_curve = Intensity[:, 0]  # First time step curve
+peaks, _ = find_peaks(first_curve)  # Detect peaks
 
+if len(peaks) > 0:
+    peak_idx = peaks[np.argmax(first_curve[peaks])]  # Highest peak index
+    peak_wavelength = WaveLength[peak_idx]  # Peak wavelength
+    peak_intensity = first_curve[peak_idx]  # Peak intensity
 
-# ax.plot(WaveLength, Intensity[:, 20], color="red", linewidth=1)
+    print(f"First Curve Peak: {peak_intensity:.2f} at {peak_wavelength:.2f} nm")
 
+    # ---- Step 2: Compute 30% Peak Threshold ----
+    threshold_30 = 0.7 * peak_intensity
+    print(f"Target Peak (30% of First Curve): {threshold_30:.2f}")
+
+    # ---- Step 3: Find a Curve with Peak Closest to 30% ----
+    best_curve_idx = None
+    best_peak_value = None
+    best_peak_wavelength = None
+    min_diff = float("inf")  # Initialize large difference
+
+    for i in range(1, N_intensity):  # Skip first curve, check others
+        curve = Intensity[:, i]
+        peaks, _ = find_peaks(curve)  # Find peaks in this curve
+
+        if len(peaks) > 0:
+            curve_peak_idx = peaks[np.argmax(curve[peaks])]  # Find highest peak
+            curve_peak_value = curve[curve_peak_idx]  # Peak intensity
+
+            # Check if this peak is closest to 30% of first curve's peak
+            diff = abs(curve_peak_value - threshold_30)
+            if diff < min_diff:
+                min_diff = diff
+                best_curve_idx = i
+                best_peak_value = curve_peak_value
+                best_peak_wavelength = WaveLength[curve_peak_idx]
+
+    # ---- Step 4: Plot the Results ----
+    if best_curve_idx is not None:
+        print(f"Best Matching Curve: {best_curve_idx} with Peak {best_peak_value:.2f} at {best_peak_wavelength:.2f} nm")
+
+        # Plot peak of first curve
+        ax.plot(peak_wavelength, peak_intensity, 'ro', markersize=8, label="First Peak")
+
+        # Plot peak of best matching curve
+        ax.plot(best_peak_wavelength, best_peak_value, 'bo', markersize=8, label="30% Peak Curve")
+
+        # Add legend
+        ax.legend(fontsize=14)
+
+plt.show()
 
 
 # Create a ScalarMappable for the color bar

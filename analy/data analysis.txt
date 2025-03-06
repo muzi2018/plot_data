@@ -1,0 +1,10 @@
+group1: 
+70% - wavelength(519.26), intensity(22329.52), 0:40 min
+50% - wavelength(519.26), intensity(15785.65), 1:30 min
+30% - wavelength(519.54), intensity(9558.42), 3:55 min
+
+
+group2: 
+70% - wavelength(517.30), intensity(28913.26), 0:55 min
+50% - wavelength(517.30), intensity(20680.16), 3:30 min
+30% - wavelength(517.86), intensity(12353.34), 4:25 min
