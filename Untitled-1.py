@@ -50,58 +50,26 @@ for i, color in enumerate(line_colors):
     rgba_color = list(color[:3]) + [alpha]  # Add the dynamic alpha
     ax.plot(WaveLength, Intensity[:, i], color=color, linewidth=1)
 
+# ---- Step: Find Peak in 60th Curve ----
+curve_60 = Intensity[:, 71]  # 60th curve (Python index starts from 0)
 
-# ---- Step 1: Find Peak in First Curve ----
-first_curve = Intensity[:, 0]  # First time step curve
-peaks, _ = find_peaks(first_curve)  # Detect peaks
+peaks_60, _ = find_peaks(curve_60)  # Find peaks
 
-if len(peaks) > 0:
-    peak_idx = peaks[np.argmax(first_curve[peaks])]  # Highest peak index
-    peak_wavelength = WaveLength[peak_idx]  # Peak wavelength
-    peak_intensity = first_curve[peak_idx]  # Peak intensity
+if len(peaks_60) > 0:
+    peak_60_idx = peaks_60[np.argmax(curve_60[peaks_60])]  # Highest peak index
+    peak_60_wavelength = WaveLength[peak_60_idx]  # Peak wavelength
+    peak_60_intensity = curve_60[peak_60_idx]  # Peak intensity
 
-    print(f"First Curve Peak: {peak_intensity:.2f} at {peak_wavelength:.2f} nm")
+    print(f"60th Curve Peak: {peak_60_intensity:.2f} at {peak_60_wavelength:.2f} nm")
 
-    # ---- Step 2: Compute 30% Peak Threshold ----
-    threshold_30 = 0.7 * peak_intensity
-    print(f"Target Peak (30% of First Curve): {threshold_30:.2f}")
+    # Plot peak on graph
+    ax.plot(peak_60_wavelength, peak_60_intensity, 'go', markersize=8, label="60th Curve Peak")
 
-    # ---- Step 3: Find a Curve with Peak Closest to 30% ----
-    best_curve_idx = None
-    best_peak_value = None
-    best_peak_wavelength = None
-    min_diff = float("inf")  # Initialize large difference
-
-    for i in range(1, N_intensity):  # Skip first curve, check others
-        curve = Intensity[:, i]
-        peaks, _ = find_peaks(curve)  # Find peaks in this curve
-
-        if len(peaks) > 0:
-            curve_peak_idx = peaks[np.argmax(curve[peaks])]  # Find highest peak
-            curve_peak_value = curve[curve_peak_idx]  # Peak intensity
-
-            # Check if this peak is closest to 30% of first curve's peak
-            diff = abs(curve_peak_value - threshold_30)
-            if diff < min_diff:
-                min_diff = diff
-                best_curve_idx = i
-                best_peak_value = curve_peak_value
-                best_peak_wavelength = WaveLength[curve_peak_idx]
-
-    # ---- Step 4: Plot the Results ----
-    if best_curve_idx is not None:
-        print(f"Best Matching Curve: {best_curve_idx} with Peak {best_peak_value:.2f} at {best_peak_wavelength:.2f} nm")
-
-        # Plot peak of first curve
-        ax.plot(peak_wavelength, peak_intensity, 'ro', markersize=8, label="First Peak")
-
-        # Plot peak of best matching curve
-        ax.plot(best_peak_wavelength, best_peak_value, 'bo', markersize=8, label="30% Peak Curve")
-
-        # Add legend
-        ax.legend(fontsize=14)
+    # Add legend
+    ax.legend(fontsize=14)
 
 plt.show()
+
 
 
 # Create a ScalarMappable for the color bar
