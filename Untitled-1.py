@@ -53,31 +53,17 @@ norm = mpl.colors.Normalize(vmin=0, vmax=lasttime)  # Normalize line indices to 
 sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
 sm.set_array([])  # Required for the color bar
 
-# # Add the color bar to the figure
-# cbar = fig.colorbar(sm, ax=ax)
-# cbar.set_label('Time(min)',fontsize=14, fontweight='bold')  # Label for the color bar
-# # Adjust colorbar tick labels (increase size and make them bold)
-# cbar.ax.tick_params(labelsize=14, width=1.5)
-# cbar.ax.set_yticks([0, 10])
-# for label in cbar.ax.get_yticklabels():
-#     label.set_fontweight('bold')
-
     
 #---- axis Label Parameter----
 ax.set_xlabel("Wavelength (nm)", fontsize=20, fontweight='bold', labelpad=20)  # Increase labelpad for more distance
 ax.set_ylabel("Intensity(Counts)",fontsize=20, fontweight='bold', labelpad=20)
 ax.set_xlim(350, 650)
 
-# # Set custom ticks with scientific notation
-# ax.set_xticks([0, 3e4, 5e4])  # Define specific x-axis ticks (0, 1e2, 2e2)
-ax.set_yticks([0, 1e4, 1.5e4])  # Define specific y-axis ticks (0, 1e3, 2e3, 3e3)
-
-# Format tick labels in scientific notation
-# ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda x, _: f'{x:.0e}'))  # X-axis
-
-ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: f'{y:.0e}'))  # Y-axis
-# Add this line after setting up your plot
-ax.set_yticklabels([])
+ax.yaxis.set_major_locator(plt.NullLocator())  # Removes major ticks
+ax.yaxis.set_minor_locator(plt.NullLocator())  # Removes minor ticks
+# ax.set_yticks([0, 1e4, 1.5e4])  # Define specific y-axis ticks (0, 1e3, 2e3, 3e3)
+# ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: f'{y:.0e}'))  # Y-axis
+# ax.set_yticklabels([])
 
 # Make sure the ticks are inside the plot too
 ax.tick_params(axis='x', direction='in', length=6, labelsize=14, width=1.5)
@@ -102,9 +88,8 @@ cbar.ax.tick_params(labelsize=20, width=1.5)  # Adjust ticks
 cbar.ax.set_yticks([0, 2, 4, 6, 8, lasttime])
 for label in cbar.ax.get_yticklabels():
     label.set_fontweight('bold')
-    
-    
-    
+
+
 # **Function to capture only points on the line**
 def on_click(event):
     if event.inaxes:  # Check if the click is inside the plot
@@ -125,8 +110,6 @@ def on_click(event):
             print(f'Clicked on line at: x = {x_nearest:.2f}, y = {y_nearest:.2f}')
             ax.plot(x_nearest, y_nearest, 'ro', markersize=8)  # Mark the clicked point
             fig.canvas.draw()  # Update the plot dynamically
-
-
 fig.canvas.mpl_connect('button_press_event', on_click)
 
 
